@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Temporales
+*.tmp
+~$*
+
+# Datos crudos grandes (agregar extensiones según el proyecto)
+# data/raw/*.xlsx
+# data/raw/*.csv
+
+# Memoria de Claude (se genera automáticamente)
+memory/

@@ -29,7 +29,7 @@ Read `CLAUDE.md` to identify the project's configuration file and data loading f
 Every script should have a header block:
 ```r
 ###############################################################
-# TRIADA - [Titulo descriptivo]
+# [PROYECTO] - [Titulo descriptivo]
 # Autor: Daniel Mendivelso
 # Fecha: [YYYY-MM-DD]
 #

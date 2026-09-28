@@ -1,11 +1,11 @@
 ---
 name: review-r
-description: Run the R code review protocol on TRIADA scripts. Checks code quality, reproducibility, domain correctness, and TRIADA-specific standards. Produces a report without editing files.
+description: Run the R code review protocol on the project's R scripts. Checks code quality, reproducibility, domain correctness, and the project's own standards (CLAUDE.md, r-code-conventions.md). Produces a report without editing files.
 disable-model-invocation: true
 argument-hint: "[filename or 'all' or 'cleaning' or 'descriptives' or 'regression']"
 ---
 
-# Review R Scripts — TRIADA
+# Review R Scripts
 
 Run the comprehensive R code review protocol.
 
@@ -20,7 +20,7 @@ Run the comprehensive R code review protocol.
 
 2. **For each script, launch the `r-reviewer` agent** with instructions to:
    - Follow the full protocol in the agent instructions
-   - Read `.claude/rules/r-code-conventions.md` for TRIADA standards
+   - Read `.claude/rules/r-code-conventions.md` for the project's standards
    - Read `config.R` for project constants and specs
    - Save report to `quality_reports/[script_name]_r_review.md`
 

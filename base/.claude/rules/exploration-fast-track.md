@@ -60,7 +60,7 @@ Exploratory scripts can live in:
 - Temporary scripts that get deleted after discussion
 - Inline R code in conversation (for quick checks)
 
-If an exploration graduates to production, it moves to the appropriate `code/` subfolder and gets the full quality treatment.
+If an exploration graduates to production, it moves to the appropriate `scripts/` subfolder and gets the full quality treatment.
 
 ---
 

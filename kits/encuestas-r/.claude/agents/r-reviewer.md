@@ -92,6 +92,17 @@ Produce a thorough, actionable code review report. You do NOT edit files — you
 
 ## Report Format
 
+### 8. NUMERICAL DISCIPLINE
+- [ ] **No float equality.** Never `==` on doubles. Use `abs(x - y) < tol` or `all.equal()`.
+- [ ] **CDF clamping.** Any computed probability passed to `qnorm()` / `pbinom()` etc. must be clamped to an OPEN interval, not `[0,1]` — exact 0 or 1 produce `-Inf`/`Inf`. Use a named epsilon: `eps <- 1e-12; pmin(1 - eps, pmax(eps, p))`.
+- [ ] **Pre-allocate, don't grow.** Vectors/lists inside loops must be pre-allocated (`vector("numeric", n)` or `numeric(n)`), never grown via `c(vec, new_val)` or `append()`.
+- [ ] **Bootstrap seed handling.** `set.seed()` once before the bootstrap loop, never inside. If parallel bootstrapping, each worker must get a deterministic sub-seed (`RNGkind("L'Ecuyer-CMRG")`).
+- [ ] **No `T`/`F` as logicals.** Use `TRUE`/`FALSE` — `T` and `F` can be overwritten by assignment.
+- [ ] **Explicit `na.rm`.** Any `mean()`, `sum()`, `var()`, `sd()` call on empirical data must explicitly set `na.rm = TRUE` or `na.rm = FALSE` — never rely on the default.
+- [ ] **NA/NaN/Inf checks.** Simulation/bootstrap results checked for `NA`/`NaN`/`Inf`; failed replications counted and reported; parallel backend registered AND unregistered.
+
+**Flag:** Float `==`, unguarded CDF, growing vectors, implicit `na.rm`, bare `T`/`F`, unhandled NA/Inf.
+
 Save report to `quality_reports/[script_name]_r_review.md`:
 
 ```markdown
@@ -134,6 +145,7 @@ Save report to `quality_reports/[script_name]_r_review.md`:
 | Output Quality | Yes/No | N |
 | Reproducibility | Yes/No | N |
 | Script Structure | Yes/No | N |
+| Numerical Discipline | Yes/No | N |
 ```
 
 ## Important Rules

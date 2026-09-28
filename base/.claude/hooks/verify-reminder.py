@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Verification Reminder Hook — TRIADA
+Verification Reminder Hook
 
 Non-blocking reminder after Write/Edit on .R files
 to remind about running the script before marking done.

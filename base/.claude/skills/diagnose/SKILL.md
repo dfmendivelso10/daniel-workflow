@@ -10,7 +10,7 @@ effort: high
 
 Find *why* an analysis errors, returns the wrong number, or won't reconcile — with a structured debugging loop rather than scattershot edits. Adapted from the `diagnose` pattern in [mattpocock/skills](https://github.com/mattpocock/skills), reshaped for empirical research code where the bug is usually a *silent* wrong number, not a crash. Ported into this project from `pedrohcgs/claude-code-my-workflow`.
 
-> **Note (PACES project):** this project does not have `/audit-reproducibility`, `replication-protocol.md`, or `claim-verifier` — the cross-references below to those pieces are informational only (they describe the pattern's home ecosystem); they are not callable here. Use `/diagnose` standalone.
+> **Note:** the cross-references below to `/audit-reproducibility`, `replication-protocol.md` or `claim-verifier` apply only if the project has those pieces installed (kits `encuestas-r` / `replicacion`); otherwise use `/diagnose` standalone.
 
 The discipline: **never edit before you can reproduce, and never fix before you can explain.** A guessed fix that makes the symptom disappear without a named root cause is how a wrong number gets *laundered* into a published table.
 

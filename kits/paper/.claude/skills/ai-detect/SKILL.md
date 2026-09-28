@@ -33,7 +33,7 @@ inserciones, descarta lo tachado, y quita tablas, notas, referencias y
 encabezados:
 
 ```bash
-python3 .claude/skills/ai-detect/docx_to_prose.py "Temporales/PACES ... .docx" > /tmp/prosa.txt
+python3 .claude/skills/ai-detect/docx_to_prose.py "Temporales/<manuscrito>.docx" > /tmp/prosa.txt
 # solo unas secciones:
 python3 .claude/skills/ai-detect/docx_to_prose.py manuscrito.docx --seccion "3." "4." > /tmp/prosa.txt
 ```

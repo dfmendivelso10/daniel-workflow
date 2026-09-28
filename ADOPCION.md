@@ -29,8 +29,10 @@ instrucciones internas para Claude.
 | Capa | Contenido | Va a |
 |---|---|---|
 | `base/` | plan-first, orchestrator, quality-gates, verification, exploration-fast-track, prompt-shaping, **confidential-data**; hooks git-guardrails, root-of-trust-guard, session-handoff, pre/post-compact, verify-reminder; skills commit, checkpoint, compress-session, context-status, diagnose, permission-check, blast-radius, differential-audit, credible-claims; `settings.template.json` | todo proyecto |
-| `kits/encuestas-r/` | data-analysis, review-r; agentes r-reviewer, verifier, domain-reviewer, econometrics-researcher; r-code-conventions, table-standards, inference-robustness; protect-files.sh; fragmento de settings | proyectos de datos en R |
+| `kits/encuestas-r/` | data-analysis, review-r, **audit-reproducibility**, **capture-environment**; agentes r-reviewer (con "Numerical discipline" de TRIADA), verifier, domain-reviewer, econometrics-researcher; r-code-conventions, table-standards, inference-robustness; protect-files.sh; fragmento de settings | proyectos de datos en R |
 | `kits/paper/` | ai-detect; writing-with-ai | proyectos con manuscrito |
+| `kits/harker/` | academic-voice (voz de redacción del grupo Harker; en Paces se llamaba `paces-voice`) | proyectos del grupo |
+| `kits/replicacion/` | replication-protocol (replicar al dígito antes de extender; Paces la tenía desactivada como `.bak`) | proyectos que replican un paquete ajeno |
 
 Layout: el filtro usa `quality_reports/`, `scripts/`, `output/`, `data/`; `aplicar.sh` los
 sustituye por los del proyecto (Paces: `03_quality_reports/`, `00_code/`, `02_outputs/`,
@@ -80,7 +82,6 @@ sustituye por los del proyecto (Paces: `03_quality_reports/`, `00_code/`, `02_ou
 |---|---|---|
 | skills/disclosure-check | pendiente | `.xlsx` (readxl) en el glob; default `02_outputs/tables/`; perfil irb; umbral n<10; PII cédula/TI |
 | skills/verify-claims + agents/claim-verifier.md + rules/post-flight-verification.md | pendiente | `paths:` a review-paper/respond-to-referees de usuario; costo Opus high |
-| skills/capture-environment | pendiente | detección `scripts/**/*.R`; salida a `ENTORNO.md` |
 | skills/coauthor-brief | pendiente | rutas |
 | skills/submission-disclosures | pendiente | cuando haya revista objetivo |
 
@@ -103,3 +104,25 @@ sustituye por los del proyecto (Paces: `03_quality_reports/`, `00_code/`, `02_ou
 - [ ] `project-template/CLAUDE.md` con placeholders `[CODE] [DATA] [OUT] [QR]` para `nuevo-proyecto.sh`.
 - [ ] Kit `latex-docencia/` cuando haga falta (todo está en el espejo).
 - [ ] Ola 2.
+
+## 4. Cosecha de TRIADA (2026-09-28)
+
+TRIADA tenía un `.claude/` propio (v1.5 adaptada + piezas suyas) y una bitácora de upstream
+(`.claude/references/workflow-upstream.md`, línea base v1.9.0 `88392cc` revisada el
+2026-08-28, nada incorporado). Esa bitácora queda superada por este archivo.
+
+| Componente (TRIADA) | Decisión | Destino |
+|---|---|---|
+| skills/academic-voice | adoptado | `kits/harker/` (idéntica a `paces-voice`) |
+| skills/audit-reproducibility (adaptada: `02_outputs/`, `.docx`) | adoptado, rutas genéricas | `kits/encuestas-r/` |
+| skills/capture-environment (adaptada) | adoptado, rutas genéricas | `kits/encuestas-r/` |
+| rules/replication-protocol.md (activa) | adoptado | `kits/replicacion/` |
+| agents/r-reviewer §8 "Numerical discipline" | fusionado | `kits/encuestas-r/agents/r-reviewer.md` |
+| skills/sync-workflow + references/workflow-upstream.md | reescrito para el filtro | `daniel-workflow/.claude/skills/sync-workflow/` |
+| rules/table-standards.md (DE, tamaños propios) | propio de TRIADA | `PROPIOS.txt` de TRIADA |
+| hooks/git-guardrails.py (131 líneas, versión vieja) | reemplazado por v2.6 | — |
+| skills/commit (directo a main) | reemplazado por v2.6 adaptada | — |
+| rules/replication-protocol.md.bak | retirado | — |
+
+Restos de proyecto limpiados en `base/`: N=346 en `orchestrator-research`, nota "PACES" en
+`diagnose`, `code/` en `exploration-fast-track`.

@@ -30,7 +30,7 @@ Plan approved (or trivial task) -> simplified orchestrator activates
   |           - Script exits without errors
   |           - Output file exists at expected path (outputs/tables/ or outputs/figures/)
   |           - Output file has non-zero size
-  |           - N observations matches project expectation (346 total: NNA tipo_persona=1 + jovenes tipo_persona=2; ver CLAUDE.md §2)
+  |           - N observations matches the expected N stated in CLAUDE.md (sección de tamaños de muestra)
   |         If fails -> fix -> re-verify (max 2 retries)
   |
   Step 3: SCORE -- Apply quality-gates rubric

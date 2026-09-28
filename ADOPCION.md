@@ -1,113 +1,105 @@
 # ADOPCION.md — registro de lo evaluado de `pedrohcgs/claude-code-my-workflow`
 
-**Último upstream evaluado por completo:** `6347d4f` (v1.5.0, 2026-04-14) — es la versión
-de la que salió el `.claude/` de Paces.
-**Upstream disponible en el espejo:** `ae72617` (v2.6.0, 2026-09-27).
-**Pendiente:** triar el delta v1.5.0 → v2.6.0 (sección 3).
+**Último upstream evaluado por completo:** `ae72617` (v2.6.0, 2026-09-27).
+**Evaluación anterior:** `6347d4f` (v1.5.0, 2026-04-14), de la que salió el `.claude/` de Paces.
 
 Espejo: `~/repos/claude-code-my-workflow` (solo `git pull`, nunca se edita).
 Filtro: este repo (`~/repos/daniel-workflow`, GitHub privado `dfmendivelso10/daniel-workflow`).
-Proyectos: reciben del filtro, nunca del espejo.
+Proyectos: reciben del filtro con `aplicar.sh`, nunca del espejo.
 
 ## Cómo se usa
 
-1. `cd ~/repos/claude-code-my-workflow && git pull`
+1. `cd ~/repos/claude-code-my-workflow && gh repo sync dfmendivelso10/claude-code-my-workflow && git pull`
 2. `git diff --stat <último sha evaluado> HEAD -- .claude/` → solo lo nuevo desde la última revisión
 3. Una decisión por archivo: **adoptado** (tal cual o traducido) · **adaptado** (se anota qué cambió)
    · **descartado** (se anota por qué) · **pendiente**
 4. Una línea por archivo en la tabla que corresponda; actualizar "Último upstream evaluado"
-5. Propagar a los proyectos solo lo adoptado/adaptado, con commit
-   `chore(claude): actualizar desde daniel-workflow <sha>`
+5. Propagar a los proyectos: `bash aplicar.sh <proyecto> <kits...> [--qr --code --out --data]`
+   y commit en el proyecto `chore(claude): actualizar desde daniel-workflow <sha>`
 
-Criterio de adopción: sirve a proyectos de datos observacionales en R con datos restringidos
-(Paces, TRIADA), o a un kit futuro (docencia/LaTeX, Stata); no duplica lo que ya hay; no
-carga contexto sin necesidad.
+Criterio: sirve a proyectos de datos observacionales en R con datos restringidos (Paces,
+TRIADA) o a un kit futuro; no duplica lo que ya hay; no exige rutas de layout que no usamos
+salvo que la adaptación sea trivial; no carga contexto sin uso. Lo adoptado se traduce al
+español cuando es una regla o skill corta; las skills largas y procedimentales (`checkpoint`,
+`compress-session`, `permission-check`) quedan en inglés con rutas adaptadas: son
+instrucciones internas para Claude.
+
+## Capas del filtro
+
+| Capa | Contenido | Va a |
+|---|---|---|
+| `base/` | plan-first, orchestrator, quality-gates, verification, exploration-fast-track, prompt-shaping, **confidential-data**; hooks git-guardrails, root-of-trust-guard, session-handoff, pre/post-compact, verify-reminder; skills commit, checkpoint, compress-session, context-status, diagnose, permission-check, blast-radius, differential-audit, credible-claims; `settings.template.json` | todo proyecto |
+| `kits/encuestas-r/` | data-analysis, review-r; agentes r-reviewer, verifier, domain-reviewer, econometrics-researcher; r-code-conventions, table-standards, inference-robustness; protect-files.sh; fragmento de settings | proyectos de datos en R |
+| `kits/paper/` | ai-detect; writing-with-ai | proyectos con manuscrito |
+
+Layout: el filtro usa `quality_reports/`, `scripts/`, `output/`, `data/`; `aplicar.sh` los
+sustituye por los del proyecto (Paces: `03_quality_reports/`, `00_code/`, `02_outputs/`,
+`01_data/`). Archivos propios de un proyecto (p. ej. `skills/paces-voice`) se declaran en
+`<proyecto>/.claude/PROPIOS.txt` y no se sobrescriben.
 
 ---
 
-## 1. Estado inicial — lo que Paces ya tiene (origen v1.5.0, adaptado a mano)
-
-Inventario tomado de `Paces/.claude/` el 2026-09-28. Es el punto de partida de `base/` y del
-kit `encuestas-r/`; falta copiarlo aquí (ver sección 4).
+## 1. Componentes de v1.5.0 ya en uso (origen Paces)
 
 | Componente | Decisión | Nota |
 |---|---|---|
-| skills/commit | adaptado | versión v1.5: hace commit → PR → merge en un paso. **Reemplazar** por la v2.6 (se detiene en el commit) |
-| skills/context-status | adoptado | |
-| skills/checkpoint | adoptado | v2.6 trae otra versión + `session-handoff.py`; comparar |
-| skills/data-analysis | adaptado | rutas `00_code/`, `02_outputs/` |
-| skills/diagnose | adoptado | |
-| skills/review-r | adaptado | español, `CLAUDE.md §5` |
-| skills/ai-detect | propio | econ-ai-detector; no viene de upstream |
-| skills/paces-voice | propio de Paces | NO va al filtro (estilo del grupo Harker) |
-| agents/r-reviewer, verifier, domain-reviewer, econometrics-researcher | adaptado | español; leen `CLAUDE.md` |
-| hooks/protect-files.sh | propio | protege `01_data/`; candidato a `base/` |
-| hooks/pre-compact.py, post-compact-restore.py, verify-reminder.py | adoptado | v2.6 corrige `post-compact-restore.py` (leía el estado del plan por palabras sueltas) |
-| rules/plan-first-workflow, orchestrator-protocol, session-logging, quality-gates, verification-protocol, exploration-fast-track, orchestrator-research, r-code-conventions, table-standards, replication-protocol | adaptado | español, umbrales 80/90; `table-standards` y la parte AER son propias |
+| rules/plan-first-workflow, orchestrator-protocol, orchestrator-research, quality-gates, verification-protocol, exploration-fast-track | adaptado → `base/` | español; rutas genéricas |
+| rules/r-code-conventions, table-standards | adaptado → `kits/encuestas-r/` | `table-standards` es propia (AER en xlsx) |
+| skills/context-status, diagnose | adoptado → `base/` | |
+| skills/data-analysis, review-r | adaptado → `kits/encuestas-r/` | |
+| skills/checkpoint (v1.5) | **reemplazado** por la v2.6 | |
+| skills/commit (proyecto, directo a main) | **reemplazado** por la v2.6 adaptada | decisión de Daniel 2026-09-28 |
+| skills/ai-detect | propio → `kits/paper/` | econ-ai-detector |
+| skills/paces-voice | propio de Paces, **no entra al filtro** | `PROPIOS.txt` |
+| agents/r-reviewer, verifier, domain-reviewer, econometrics-researcher | adaptado → `kits/encuestas-r/` | `effort: medium` en verifier y domain-reviewer (v2.6) |
+| hooks/protect-files.sh | propio → `kits/encuestas-r/` | reescrito 2026-09-28: `data/*raw*/` bloquea, resto de `data/` pide confirmación |
+| hooks/pre-compact.py, post-compact-restore.py | **reemplazados** por la v2.6 → `base/` | v2.6 lee el campo Status del plan en vez de palabras sueltas |
+| hooks/verify-reminder.py | propio → `base/` | |
+| hooks/log-reminder.py (en `04_scripts/`) | propio de Paces, se conserva | `aplicar.sh` conserva hooks del proyecto que el filtro no trae |
 
-## 2. Reglas globales de usuario (`~/.claude/rules/`), también de v1.5
+## 2. Delta v1.5.0 → v2.6.0
 
-meta-governance, session-logging, orchestrator-protocol, cross-artifact-review,
-plan-first-workflow, resultados-formato (propia). v2.6 hace `meta-governance` y
-`orchestrator-protocol` *path-scoped* (deja de cargarlos en toda sesión): **revisar**.
+### Adoptados / adaptados (ola 1, 2026-09-28)
 
-## 3. Delta v1.5.0 → v2.6.0 — pendiente de triaje
-
-Preselección (leer en detalle antes de decidir). Lo no listado como candidato se propone
-**descartar** por ser de docencia/Beamer/Quarto/TikZ, Stata, paquetes de R, simulaciones,
-grants, Issues de GitHub u Oracle externo — salvo que aparezca un kit que lo necesite.
-
-### Candidatos para `base/`
-
-| Componente | Estado | Por qué |
+| Componente | Decisión | Nota |
 |---|---|---|
-| rules/confidential-data.md | pendiente | datos de menores en `01_data/`; deny rules para `settings.json` |
-| rules/repo-hygiene.md | pendiente | qué se commitea y dónde va cada tipo de archivo |
-| rules/model-routing.md | pendiente | costo/efecto por modelo; pines de `effort` |
-| rules/summary-parity.md | pendiente | lo que el agente resume debe coincidir con lo hecho |
-| rules/post-flight-verification.md | pendiente | verificación de afirmaciones del agente |
-| rules/prompt-shaping.md | pendiente | corta; ver si aporta |
-| skills/commit (v2.6) | pendiente | se detiene en el commit; `--pr` explícito; nunca mergea |
-| skills/checkpoint + compress-session + hooks/session-handoff.py | pendiente | traspaso entre sesiones (incidente 2026-09-25) |
-| skills/permission-check | pendiente | diagnóstico de permisos |
-| skills/promote-memory + agents/promote-memory-council.md | pendiente | gobierno de MEMORY.md con tope de 25 KB |
-| hooks/git-guardrails.py | pendiente | evitar `git add -A`, push accidental |
-| hooks/root-of-trust-guard.py | pendiente | leer qué protege |
-| hooks/claim-reconcile.py | pendiente | va con verify-claims |
+| rules/confidential-data.md | **adaptado** → `base/` | español; regla 1 admite datos en repo privado como decisión escrita del proyecto; añade "solo agregados en salidas de R"; deny rules en `settings.template.json`; sección de copias que guarda Claude Code; sin IRB en README |
+| rules/prompt-shaping.md | adoptado (traducido) → `base/` | |
+| rules/writing-with-ai.md | adaptado (traducido) → `kits/paper/` | `/humanize` → `/ai-detect` |
+| rules/inference-robustness.md | adaptado (traducido) → `kits/encuestas-r/` | `paths:` `scripts/**` → se sustituye por `00_code/**` al aplicar |
+| rules/meta-governance.md, orchestrator-protocol.md (nivel usuario) | adaptado | añadir `paths:` como v2.6 para que no carguen en toda sesión |
+| skills/commit | **adaptado** (reescrito en español) → `base/` | sin Step 0 (`quality_score.py`), 0b (`backtest.sh` valida el template) ni 0c (passports); paso 0 propio: `parse()` de los `.R` cambiados + agente `verifier` si existe; rama si en main; add por archivo; `--pr`; nunca merge |
+| skills/checkpoint, compress-session + hooks/session-handoff.py | adaptado → `base/` | rutas por token; hook en `SessionStart(startup)` y `UserPromptSubmit` |
+| skills/permission-check, blast-radius, differential-audit, credible-claims | adoptado → `base/` (las tres últimas traducidas) | sin referencias a `references/` no adoptadas |
+| hooks/git-guardrails.py, root-of-trust-guard.py | adoptado → `base/` | timeout 20 (fijo en el código); probado: deniega `git add -A` y `echo > .claude/settings.json` |
+| model-routing.md → solo la idea | pines de `effort` | verifier, domain-reviewer `medium`; referees `high` |
 
-### Candidatos para kit `encuestas-r/`
+### Ola 2 — pendientes con valor claro
 
-| Componente | Estado | Por qué |
+| Componente | Estado | Qué falta |
 |---|---|---|
-| skills/disclosure-check | pendiente | celdas pequeñas en tablas de menores; asume `output/` → adaptar a `02_outputs/` |
-| skills/verify-claims + credible-claims + agents/claim-verifier.md | pendiente | cifras del paper vs outputs; complementa `audit-reproducibility` |
-| skills/capture-environment | pendiente | regenerar `ENTORNO.md` |
-| skills/replication-package | pendiente | comparar con `04_scripts/exportar_paquete_replicacion.sh` de Paces |
-| skills/power-analysis | pendiente | potencia con pocos eventos (Paces: 15 eventos en NNA con K10 ≥ 25) |
-| skills/blast-radius, differential-audit | pendiente | leer; pueden ser útiles al tocar `config.R` |
-| rules/inference-robustness.md | pendiente | |
+| skills/disclosure-check | pendiente | `.xlsx` (readxl) en el glob; default `02_outputs/tables/`; perfil irb; umbral n<10; PII cédula/TI |
+| skills/verify-claims + agents/claim-verifier.md + rules/post-flight-verification.md | pendiente | `paths:` a review-paper/respond-to-referees de usuario; costo Opus high |
+| skills/capture-environment | pendiente | detección `scripts/**/*.R`; salida a `ENTORNO.md` |
+| skills/coauthor-brief | pendiente | rutas |
+| skills/submission-disclosures | pendiente | cuando haya revista objetivo |
 
-### Candidatos para kit `paper/`
+### Descartados (con motivo)
 
-| Componente | Estado | Por qué |
-|---|---|---|
-| rules/writing-with-ai.md | pendiente | prosa del manuscrito |
-| skills/humanize, voice-profile + agents/humanize-auditor.md | pendiente | Paces ya tiene `ai-detect` y `paces-voice`; ver solapamiento |
-| skills/preregister, submission-disclosures, coauthor-brief | pendiente | ciclo de sometimiento |
-| skills/review-paper (v2.6), seven-pass-review, adjudicate-review | pendiente | Paces usa las versiones de usuario (`~/.claude/skills`); comparar |
+| Componente | Motivo |
+|---|---|
+| rules/repo-hygiene.md + scripts/check-repo-hygiene.py | layout fijo (`output/`, `scripts/`, `Slides/`), allowlists en el código; lo útil ya está en README §3 y CLAUDE §7 de Paces |
+| rules/model-routing.md | nombra 15 agentes que no existen aquí; se aplicó solo la idea de los pines |
+| rules/summary-parity.md | para mantener un template, no un proyecto |
+| skills/promote-memory + agents/promote-memory-council.md | criterio "¿sirve a un forker de otra disciplina?"; en un proyecto casi todo vota NO |
+| skills/humanize, voice-profile + agents/humanize-auditor.md | léxico y calibración en inglés; ya hay `ai-detect` y `paces-voice` |
+| skills/replication-package | asume LaTeX (`\input{}`) y `output/`; Paces tiene `exportar_paquete_replicacion.sh` + README WB |
+| skills/power-analysis, preregister | solo ex-ante; kit futuro de diseño de estudios |
+| hooks/claim-reconcile.py | sin passports no hace nada; regex fijo a `scripts/` y `output/` |
+| Todo docencia/Beamer/Quarto/TikZ, Stata, paquetes de R, simulaciones, grants, Issues, Oracle | fuera de alcance; quedan en el espejo para un kit futuro |
 
-### Propuestos a descartar (no leer salvo que aparezca un kit)
+## 3. Pendientes del filtro
 
-skills: syllabus, teach-from-paper, scaffold-exercises, grant-proposal, issues, oracle-review,
-respond-to-eval, r-package-check, simulation-study, stata-replication, triage-inbox, vaccinate,
-new-skill, data-management-plan, verify-artifact, challenge.
-agents: r-package-reviewer, sim-reviewer.
-hooks: issue-guard.py, open-issues.py.
-rules: issue-ledger, r-package-conventions, simulation-conventions, stata-code-conventions,
-agent-authored-code, content-invariants, progress-reports, review-fencing.
-
-## 4. Pendientes del filtro mismo
-
-- [ ] Poblar `base/.claude/` y `kits/encuestas-r/`, `kits/paper/` desde Paces (sección 1).
-- [ ] `nuevo-proyecto.sh <nombre> [kits...]`: copia `base/` + kits y rellena `CLAUDE.md`.
-- [ ] Triar la sección 3 y actualizar "Último upstream evaluado" a `ae72617`.
+- [ ] `project-template/CLAUDE.md` con placeholders `[CODE] [DATA] [OUT] [QR]` para `nuevo-proyecto.sh`.
+- [ ] Kit `latex-docencia/` cuando haga falta (todo está en el espejo).
+- [ ] Ola 2.

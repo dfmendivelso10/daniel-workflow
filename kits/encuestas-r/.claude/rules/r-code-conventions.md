@@ -41,7 +41,7 @@ Every script should have a header block:
 ###############################################################
 ```
 
-Logical flow: setup -> data loading -> computation -> output/export.
+Logical flow: setup -> data loading -> computation -> output / export.
 
 ## 3. Reproducibility
 

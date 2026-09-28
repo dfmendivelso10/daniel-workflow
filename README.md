@@ -2,6 +2,15 @@
 
 Workflow personal de Claude Code para economía aplicada.
 
+> **Estado 2026-09-28.** Este repo es el **filtro** entre el repo de Sant'Anna y mis
+> proyectos. El espejo de Sant'Anna vive en `~/repos/claude-code-my-workflow` (v2.6.0,
+> solo `git pull`); este filtro en `~/repos/daniel-workflow` (GitHub privado). El registro
+> de qué se evaluó, adoptó o descartó de cada versión está en **`ADOPCION.md`**; ahí
+> también está el diseño por capas (`base/` + `kits/`) y lo pendiente. Ojo: el `.claude/`
+> que describe la sección "Estructura" de abajo todavía **no existe en este repo** — los
+> archivos propios que lista viven hoy en `~/.claude/` y en `Paces/.claude/`; poblarlo es
+> el pendiente 4.1 de `ADOPCION.md`.
+
 Base: [pedro-hcgs/claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow) (Sant'Anna).
 Extensiones propias: econometría macro-fiscal, tablas AER, Beamer, medición de impacto.
 
@@ -30,10 +39,15 @@ lo detecta automáticamente y carga las reglas, agentes y skills.
 
 ## Cómo actualizar desde Sant'Anna
 
-Cuando Sant'Anna publique cambios en su repo:
+Cuando Sant'Anna publique cambios en su repo (el ciclo completo, con el registro
+de decisiones, está en `ADOPCION.md`):
 
 ```bash
-# 1. Ver qué cambió
+# 0. Actualizar el espejo y ver solo lo nuevo desde la última revisión
+cd ~/repos/claude-code-my-workflow && gh repo sync dfmendivelso10/claude-code-my-workflow && git pull
+git diff --stat <último sha evaluado en ADOPCION.md> HEAD -- .claude/
+
+# 1. Ver qué cambió (alternativa desde este repo)
 git fetch upstream
 git diff main upstream/main -- .claude/
 

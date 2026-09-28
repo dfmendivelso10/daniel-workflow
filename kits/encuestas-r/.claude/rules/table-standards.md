@@ -1,7 +1,7 @@
 ---
 paths:
   - "**/*.R"
-  - "outputs/tables/**"
+  - "output/tables/**"
 ---
 
 # Table Standards

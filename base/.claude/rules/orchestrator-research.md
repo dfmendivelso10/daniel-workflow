@@ -1,6 +1,7 @@
 ---
 paths:
   - "scripts/**/*.R"
+  - "explorations/**"
   - "output/**"
 ---
 
@@ -28,7 +29,7 @@ Plan approved (or trivial task) -> simplified orchestrator activates
   Step 2: VERIFY -- Execute the script, check outputs exist, check N
   |         MANDATORY: run `Rscript path/to/script.R` and confirm:
   |           - Script exits without errors
-  |           - Output file exists at expected path (outputs/tables/ or outputs/figures/)
+  |           - Output file exists at expected path (output/tables/ or output/figures/)
   |           - Output file has non-zero size
   |           - N observations matches the expected N stated in CLAUDE.md (sección de tamaños de muestra)
   |         If fails -> fix -> re-verify (max 2 retries)

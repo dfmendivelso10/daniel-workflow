@@ -1,72 +1,62 @@
-# [Nombre del proyecto] — Instrucciones para Claude
+# [Nombre del proyecto] — Contexto para Claude
 
-## Proyecto
-[Descripción breve: qué pregunta responde, para quién, con qué datos.]
+**Autor:** Daniel Mendivelso (df.mendivelso10@gmail.com)
+**Ultima actualizacion:** [YYYY-MM-DD]
 
-- **Candidato/Autor:** Daniel Mendivelso (df.mendivelso10@gmail.com)
-- **Fecha límite:** [VERIFICAR]
-- **Período de análisis:** [rango de años]
-- **Cobertura:** [países / regiones / unidades]
+Este archivo es la fuente de contexto del proyecto para el sistema `.claude/`. La
+configuracion tecnica (rutas, librerias, parametros) vive en `[CODE]/config.R`.
 
 ---
 
-## Fuentes de Datos
+## 1. Proyecto
 
-| Fuente | Uso | Estado |
-|--------|-----|--------|
-| [Fuente principal] | Variable dependiente | [PENDIENTE] |
-| [Fuente 2] | Variable de tratamiento | [PENDIENTE] |
+[Que pregunta responde, para quien, con que datos. Tres lineas.]
 
----
+- **Poblacion / unidad de analisis:** [...]
+- **Periodo y cobertura:** [...]
+- **N esperado:** [...] — todo script lo reporta antes de estimar; si difiere, investigar.
 
-## Reglas de Trabajo
+## 2. Datos
 
-### Datos
-- **NUNCA** modificar archivos en `data/raw/` sin confirmación explícita.
-- Datos limpios van en `data/processed/`.
-- Todo output reproducible desde `data/raw/`.
+| Archivo (`[DATA]/raw/`) | Contenido | Uso |
+|---|---|---|
+| [fuente principal] | [...] | [...] |
 
-### Código
-- R: `source(here::here("code/config.R"))` al inicio de cada script.
-- `config.R` define: rutas, semilla (`set.seed(42)`), paleta, parámetros.
-- Scripts numerados en `code/`. Tablas → `outputs/tables/`, figuras → `outputs/figures/`.
+**Decision sobre git (escribir aqui, con fecha):** [ (a) `[DATA]/` en `.gitignore`, copias en
+disco + respaldo institucional  |  (b) en este repo privado, nunca publico ]. Fecha: [...].
 
-### Verificación
-Antes de reportar "completado":
-1. Script ejecuta sin errores.
-2. Output existe en la ruta esperada.
-3. N de observaciones coincide con lo esperado.
+**Sensibilidad:** [publicos / restringidos / datos de personas]. Si son de personas: Claude
+no abre `[DATA]/` (deny rules en `settings.json`) y las salidas de los scripts solo
+imprimen agregados. Regla completa en `.claude/rules/confidential-data.md`.
 
----
+## 3. Variables y errores frecuentes
 
-## Estructura
+[Una entrada por pitfall descubierto: variable, que se asumia, que es cierto, donde se
+corrige. Esta seccion la leen los agentes revisores.]
+
+## 4. Especificaciones
+
+[Modelos M1..Mk centralizados en `[CODE]/config.R`; desviaciones documentadas aqui.]
+
+## 5. Convenciones tecnicas
+
+- Semilla global en `config.R`; cada bootstrap fija la suya.
+- Rutas con `here::here()`; ancla `.here` en la raiz. Nunca rutas absolutas.
+- Tablas y figuras: `.claude/rules/table-standards.md` (si aplica).
+- Logs: `iniciar_log()` / `cerrar_log()` de `config.R` → `logs/`.
+
+## 6. Pipeline
 
 ```
-code/
-├── config.R
-├── limpieza/        descarga y procesamiento
-├── descriptivas/    tablas y figuras descriptivas
-└── explorations/    análisis exploratorio (no publicable)
-
-data/
-├── raw/             fuentes crudas (NO tocar)
-└── processed/       paneles limpios
-
-outputs/
-├── figures/
-└── tables/
-
-docs/                comunicación final
-quality_reports/     planes, logs, auditorías
-ai_logs/             prompts y decisiones de IA
+Master_Script.R      → punto de entrada; un proceso por script; el primer fallo detiene
+[CODE]/              → scripts numerados por fase (limpieza, descriptivas, figuras, modelos)
+[CODE]/utils/        → funciones compartidas
+[DATA]/raw/          → crudos (nunca se modifican)   [DATA]/cleaned/ → generados
+[OUT]/tables/, [OUT]/figures/ → todo lo que vive aqui lo genera el Master
+[QR]/plans/, [QR]/session_logs/, [QR]/checkpoints/ → planes, bitacoras, traspasos
 ```
 
----
+## 7. Como usar este archivo
 
-## Estrategia de Identificación
-[Llenar antes de estimar — forward engineering.]
-
----
-
-## Hallazgos Clave
-[Llenar conforme avanza el proyecto.]
+- Antes de escribir un script: leer §3 y §4.
+- Cuando el usuario corrija un error: entrada `[LEARN:tag]` en `MEMORY.md` y, si aplica, §3.

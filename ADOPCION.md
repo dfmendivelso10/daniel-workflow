@@ -126,3 +126,23 @@ TRIADA tenía un `.claude/` propio (v1.5 adaptada + piezas suyas) y una bitácor
 
 Restos de proyecto limpiados en `base/`: N=346 en `orchestrator-research`, nota "PACES" en
 `diagnose`, `code/` en `exploration-fast-track`.
+
+## 5. Cosecha de LIA (2026-09-28)
+
+LIA recibía el workflow por un subtree squashed de Pedro (`.claude-upstream/`, 211
+archivos, v1.x) con 10 skills por symlink y `update-upstream.sh`. El 2026-09-28 se retiró
+el subtree y se aplicó el filtro (`aplicar.sh` con kits `encuestas-r paper harker
+replicacion`, layout `03_quality_reports/ 00_code/ 02_outputs/ 01_data/`), rama
+`chore/claude-workflow-v2.6`.
+
+| Componente (LIA) | Decisión | Destino |
+|---|---|---|
+| rules/did-conventions.md (candado DiD 2×2 del RCT) | propio de LIA por ahora; candidato a kit `rct/` si aparece otro proyecto experimental | `PROPIOS.txt` de LIA |
+| rules/project-outputs.md, rules/simulation-conventions.md | propios de LIA | `PROPIOS.txt` de LIA |
+| rules/table-standards.md (versión LIA) | propio de LIA | `PROPIOS.txt` de LIA |
+| skills/daniel-voice (con `samples/`) | propio de LIA; solapa con `academic-voice` (kit harker), decidir cuál manda | `PROPIOS.txt` de LIA |
+| agents/claim-verifier.md, agents/methods-referee.md, hooks/claim-reconcile.py | propios de LIA; `aplicar.sh` los conserva | — |
+| 7 skills por symlink que el filtro no trae (review-paper, replication-package, simulation-study, seven-pass-review, disclosure-check, verify-claims, power-analysis) | no vuelven; misma decisión que §2 descartados | — |
+| hooks/git-guardrails.py (130 líneas) | reemplazado por v2.6 | — |
+
+Nada de LIA entra al filtro en esta pasada.
